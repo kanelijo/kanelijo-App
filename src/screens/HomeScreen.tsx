@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }: any) {
               <Text style={styles.titleText}>Student Room</Text>
             </View>
             <TouchableOpacity style={styles.listRoomButton}>
-              <Ionicons name="add" size={18} color="#FF6B6B" />
+              <Ionicons name="add" size={16} color="#FF4500" />
               <Text style={styles.listRoomText}>List Room</Text>
             </TouchableOpacity>
           </View>
@@ -53,7 +53,9 @@ export default function HomeScreen({ navigation }: any) {
               placeholder="Search rooms, locations..."
               placeholderTextColor="#a1a1aa"
             />
-            <Ionicons name="options" size={20} color="#FF6B6B" style={styles.filterIcon} />
+            <View style={styles.filterIconBg}>
+               <Ionicons name="options" size={18} color="#FF4500" />
+            </View>
           </View>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.locationScroll} contentContainerStyle={styles.locationContainer}>
@@ -125,8 +127,6 @@ const styles = StyleSheet.create({
   headerGradient: {
     paddingTop: 60,
     paddingBottom: 24,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
   },
   headerTop: {
     flexDirection: 'row',
@@ -137,12 +137,12 @@ const styles = StyleSheet.create({
   },
   greetingText: { fontSize: 16, color: '#fff', fontWeight: '500', opacity: 0.9 },
   titleText: { fontSize: 32, color: '#fff', fontWeight: '800', marginTop: 4 },
-  listRoomButton: { flexDirection: 'row', backgroundColor: '#fff', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 20, alignItems: 'center' },
+  listRoomButton: { flexDirection: 'row', backgroundColor: '#fff', paddingHorizontal: 16, paddingVertical: 10, borderRadius: 24, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 },
   listRoomText: { color: '#FF4500', fontWeight: '700', marginLeft: 4, fontSize: 13 },
-  searchContainer: { flexDirection: 'row', backgroundColor: '#fff', marginHorizontal: 24, borderRadius: 24, padding: 16, alignItems: 'center', marginBottom: 24 },
+  searchContainer: { flexDirection: 'row', backgroundColor: '#fff', marginHorizontal: 24, borderRadius: 24, padding: 8, paddingLeft: 16, alignItems: 'center', marginBottom: 24 },
   searchIcon: { marginRight: 12 },
-  searchInput: { flex: 1, fontSize: 16, color: '#000' },
-  filterIcon: { marginLeft: 12 },
+  searchInput: { flex: 1, fontSize: 15, color: '#000', height: 40 },
+  filterIconBg: { backgroundColor: '#FFECE5', padding: 8, borderRadius: 12 },
   locationScroll: { paddingLeft: 24 },
   locationContainer: { paddingRight: 48 },
   locationPill: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginRight: 12 },

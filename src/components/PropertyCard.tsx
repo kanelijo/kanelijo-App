@@ -88,14 +88,15 @@ export default function PropertyCard({ data, onPress, variant = 'vertical' }: Pr
           )}
           
           <View style={styles.bottomRow}>
-            <View style={styles.priceContainer}>
-              <Text style={styles.price}>₹{data.price.toLocaleString()}</Text>
-              <Text style={styles.perMonth}>/mo</Text>
+            <View style={[styles.priceContainer, isHorizontal && {flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+               <View style={{flexDirection: 'row', alignItems: 'baseline'}}>
+                 <Text style={styles.price}>₹{data.price.toLocaleString()}</Text>
+                 <Text style={styles.perMonth}>/mo</Text>
+               </View>
+               {isHorizontal && data.verified ? (
+                  <Ionicons name="checkmark-circle" size={20} color="#22c55e" />
+               ) : null}
             </View>
-            
-            {isHorizontal && data.verified ? (
-               <Ionicons name="checkmark-circle" size={20} color="#22c55e" />
-            ) : null}
 
             {!isHorizontal && (
               <LinearGradient colors={['#FF4500', '#FF3B30']} style={styles.viewButton}>
@@ -112,11 +113,10 @@ export default function PropertyCard({ data, onPress, variant = 'vertical' }: Pr
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#131316',
-    borderRadius: 24,
+    borderRadius: 20,
     marginBottom: 24,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#27272a',
+    borderWidth: 0,
   },
   cardHorizontal: { width: 280, marginBottom: 0 },
   cardVertical: { width: '100%' },
@@ -138,11 +138,11 @@ const styles = StyleSheet.create({
   ratingRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   ratingText: { color: '#fff', fontSize: 13, fontWeight: '700', marginLeft: 4 },
   reviewText: { color: '#71717a', fontWeight: '400' },
-  title: { fontSize: 18, fontWeight: '700', color: '#ffffff', marginBottom: 6 },
+  title: { fontSize: 16, fontWeight: '700', color: '#ffffff', marginBottom: 4 },
   locationRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  locationText: { fontSize: 13, color: '#a1a1aa', marginLeft: 4 },
-  amenitiesRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 },
-  amenityPill: { borderWidth: 1, borderColor: '#3f3f46', borderRadius: 12, paddingHorizontal: 10, paddingVertical: 4 },
+  locationText: { fontSize: 12, color: '#a1a1aa', marginLeft: 4 },
+  amenitiesRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 6 },
+  amenityPill: { borderWidth: 1, borderColor: '#3f3f46', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
   amenityText: { color: '#d4d4d8', fontSize: 11, fontWeight: '500' },
   moreAmenitiesText: { color: '#71717a', fontSize: 11 },
   bottomRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 'auto' },
