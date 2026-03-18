@@ -4,13 +4,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '../services/supabase';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }: any) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <View style={styles.topHeader}>
+        <Text style={styles.headerTitleKanelijo}>Kanelijo</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.container}>
         
         <View style={styles.headerCard}>
@@ -42,17 +45,17 @@ export default function ProfileScreen() {
 
         <Text style={styles.sectionTitle}>MY ACTIVITY</Text>
         <View style={styles.menuCard}>
-          <MenuItem icon="heart-outline" label="Saved Rooms" />
-          <MenuItem icon="time-outline" label="Recently Viewed" />
-          <MenuItem icon="home-outline" label="My Listings" />
+          <MenuItem icon="heart-outline" label="Saved Rooms" onPress={() => navigation.navigate('Saved')} />
+          <MenuItem icon="time-outline" label="Recently Viewed" onPress={() => navigation.navigate('Explore')} />
+          <MenuItem icon="home-outline" label="My Listings" onPress={() => alert('Listings coming soon!')} />
         </View>
 
         <Text style={styles.sectionTitle}>ACCOUNT</Text>
         <View style={styles.menuCard}>
-          <MenuItem icon="person-outline" label="Edit Profile" />
-          <MenuItem icon="notifications-outline" label="Notifications" />
-          <MenuItem icon="shield-checkmark-outline" label="Privacy & Security" />
-          <MenuItem icon="help-circle-outline" label="Help & Support" />
+          <MenuItem icon="person-outline" label="Edit Profile" onPress={() => alert('Edit Profile coming soon!')} />
+          <MenuItem icon="notifications-outline" label="Notifications" onPress={() => alert('Notifications coming soon!')} />
+          <MenuItem icon="shield-checkmark-outline" label="Privacy & Security" onPress={() => alert('Privacy & Security coming soon!')} />
+          <MenuItem icon="help-circle-outline" label="Help & Support" onPress={() => alert('Support coming soon!')} />
         </View>
 
         <Text style={styles.sectionTitle}>MORE</Text>
@@ -71,9 +74,9 @@ export default function ProfileScreen() {
   );
 }
 
-function MenuItem({ icon, label }: { icon: any; label: string }) {
+function MenuItem({ icon, label, onPress }: { icon: any; label: string; onPress?: () => void }) {
   return (
-    <TouchableOpacity style={styles.menuItem}>
+    <TouchableOpacity style={styles.menuItem} onPress={onPress}>
       <View style={styles.menuIconContainer}>
         <Ionicons name={icon} size={20} color="#e4e4e7" />
       </View>
@@ -85,7 +88,9 @@ function MenuItem({ icon, label }: { icon: any; label: string }) {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
-  container: { paddingHorizontal: 16, paddingBottom: 40, paddingTop: 16 },
+  topHeader: { paddingHorizontal: 24, paddingVertical: 12 },
+  headerTitleKanelijo: { fontSize: 24, fontWeight: '800', color: '#FF3B30', letterSpacing: 1 },
+  container: { paddingHorizontal: 16, paddingBottom: 40, paddingTop: 8 },
   headerCard: {
     backgroundColor: '#131316',
     borderRadius: 24,

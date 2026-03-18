@@ -26,8 +26,8 @@ const MOCK_PROPERTIES: PropertyData[] = [
   },
 ];
 
-export default function HomeScreen() {
-  const [activeLocation, setActiveLocation] = useState('Pilani');
+export default function HomeScreen({ navigation }: any) {
+  const [activeLocation, setActiveLocation] = useState('Sehore');
   const [activeType, setActiveType] = useState('All');
 
   return (
@@ -57,7 +57,7 @@ export default function HomeScreen() {
           </View>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.locationScroll} contentContainerStyle={styles.locationContainer}>
-            {['Pilani', 'Hyderabad', 'Bangalore', 'Goa'].map(loc => (
+            {['Sehore', 'Bhopal', 'Indore', 'Ichhawar', 'Ashta', 'Kothri'].map(loc => (
               <TouchableOpacity key={loc} style={[styles.locationPill, activeLocation === loc && styles.locationPillActive]} onPress={() => setActiveLocation(loc)}>
                 <Ionicons name="location-outline" size={14} color="#fff" style={styles.locationPillIcon} />
                 <Text style={styles.locationPillText}>{loc}</Text>
@@ -79,7 +79,7 @@ export default function HomeScreen() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
           {MOCK_PROPERTIES.map(item => (
             <View key={item.id} style={styles.horizontalCardContainer}>
-              <PropertyCard data={item} />
+              <PropertyCard data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} />
             </View>
           ))}
         </ScrollView>
@@ -108,7 +108,7 @@ export default function HomeScreen() {
 
         <View style={styles.verticalList}>
           {MOCK_PROPERTIES.map(item => (
-             <PropertyCard key={`v-${item.id}`} data={item} />
+             <PropertyCard key={`v-${item.id}`} data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} />
           ))}
         </View>
 

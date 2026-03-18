@@ -12,6 +12,8 @@ import HomeScreen from '../screens/HomeScreen';
 import ExploreScreen from '../screens/ExploreScreen';
 import SavedScreen from '../screens/SavedScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import RoomDetailScreen from '../screens/RoomDetailScreen';
+import HelpSupportScreen from '../screens/HelpSupportScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,7 +66,11 @@ export default function AppNavigator() {
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
         {session && session.user ? (
-          <Stack.Screen name="MainTabs" component={BottomTabs} />
+          <>
+            <Stack.Screen name="MainTabs" component={BottomTabs} />
+            <Stack.Screen name="RoomDetail" component={RoomDetailScreen} />
+            <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
+          </>
         ) : (
           <Stack.Screen name="Login" component={LoginScreen} />
         )}

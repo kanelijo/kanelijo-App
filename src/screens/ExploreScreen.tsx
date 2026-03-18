@@ -25,7 +25,7 @@ const MOCK_PROPERTIES: PropertyData[] = [
   },
 ];
 
-export default function ExploreScreen() {
+export default function ExploreScreen({ navigation }: any) {
   const [activeRoomType, setActiveRoomType] = useState('All');
   const [activeGender, setActiveGender] = useState('All');
   const [activeRent, setActiveRent] = useState('Any');
@@ -76,7 +76,7 @@ export default function ExploreScreen() {
 
         <View style={styles.listContainer}>
           {MOCK_PROPERTIES.map(item => (
-            <PropertyCard key={item.id} data={item} variant="vertical" />
+            <PropertyCard key={item.id} data={item} variant="vertical" onPress={() => navigation.navigate('RoomDetail', { property: item })} />
           ))}
         </View>
 
