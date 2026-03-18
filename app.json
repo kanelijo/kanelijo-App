@@ -28,8 +28,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-asset",
-      "expo-font"
+      "expo-asset"
     ],
     "extra": {
       "eas": {
