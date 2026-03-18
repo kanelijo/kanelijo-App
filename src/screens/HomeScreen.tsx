@@ -14,6 +14,11 @@ const MOCK_PROPERTIES: PropertyData[] = [
     imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=800',
     beds: 1,
     baths: 1,
+    type: 'Studio',
+    rating: 4.9,
+    reviews: 128,
+    verified: true,
+    amenities: ['WiFi', 'AC', 'Attached Bathroom']
   },
   {
     id: '2',
@@ -23,12 +28,19 @@ const MOCK_PROPERTIES: PropertyData[] = [
     imageUrl: 'https://images.unsplash.com/photo-1502672260266-1c1e52b154ce?auto=format&fit=crop&q=80&w=800',
     beds: 1,
     baths: 1,
+    type: '1BHK',
+    rating: 4.8,
+    reviews: 24,
+    verified: false,
+    amenities: ['WiFi', 'Washing Machine']
   },
 ];
 
 export default function HomeScreen({ navigation }: any) {
   const [activeLocation, setActiveLocation] = useState('Sehore');
   const [activeType, setActiveType] = useState('All');
+
+  const filteredProperties = activeType === 'All' ? MOCK_PROPERTIES : MOCK_PROPERTIES.filter(p => p.type === activeType);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false} bounces={false}>
@@ -79,9 +91,9 @@ export default function HomeScreen({ navigation }: any) {
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
-          {MOCK_PROPERTIES.map(item => (
+          {filteredProperties.map(item => (
             <View key={item.id} style={styles.horizontalCardContainer}>
-              <PropertyCard data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} />
+              <PropertyCard data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} variant="horizontal" />
             </View>
           ))}
         </ScrollView>
@@ -109,7 +121,7 @@ export default function HomeScreen({ navigation }: any) {
         </ScrollView>
 
         <View style={styles.verticalList}>
-          {MOCK_PROPERTIES.map(item => (
+          {filteredProperties.map(item => (
              <PropertyCard key={`v-${item.id}`} data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} />
           ))}
         </View>

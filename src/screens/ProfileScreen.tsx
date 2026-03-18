@@ -55,7 +55,7 @@ export default function ProfileScreen({ navigation }: any) {
           <MenuItem icon="person-outline" label="Edit Profile" onPress={() => alert('Edit Profile coming soon!')} />
           <MenuItem icon="notifications-outline" label="Notifications" onPress={() => alert('Notifications coming soon!')} />
           <MenuItem icon="shield-checkmark-outline" label="Privacy & Security" onPress={() => alert('Privacy & Security coming soon!')} />
-          <MenuItem icon="help-circle-outline" label="Help & Support" onPress={() => alert('Support coming soon!')} />
+          <MenuItem icon="help-circle-outline" label="Help & Support" onPress={() => navigation.navigate('HelpSupport')} />
         </View>
 
         <Text style={styles.sectionTitle}>MORE</Text>
