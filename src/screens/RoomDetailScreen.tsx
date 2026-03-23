@@ -1,11 +1,54 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView, Platform, Linking, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import MapView, { Marker, Callout } from 'react-native-maps';
+import { supabase } from '../services/supabase';
 
 export default function RoomDetailScreen({ route, navigation }: any) {
   const { property } = route.params;
+  const [isSaved, setIsSaved] = useState(false);
+  const [ownerPhone, setOwnerPhone] = useState<string | null>(null);
+
+  useEffect(() => {
+    checkIfSaved();
+    fetchOwnerContact();
+  }, []);
+
+  const checkIfSaved = async () => {
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) return;
+    const { data } = await supabase.from('saved_rooms').select('id').eq('user_id', userData.user.id).eq('room_id', property.id).single();
+    setIsSaved(!!data);
+  };
+
+  const toggleSave = async () => {
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) return;
+    if (isSaved) {
+      await supabase.from('saved_rooms').delete().eq('user_id', userData.user.id).eq('room_id', property.id);
+      setIsSaved(false);
+    } else {
+      await supabase.from('saved_rooms').insert({ user_id: userData.user.id, room_id: property.id });
+      setIsSaved(true);
+    }
+  };
+
+  const fetchOwnerContact = async () => {
+    if (!property.owner_id) return;
+    const { data } = await supabase.from('profiles').select('phone').eq('id', property.owner_id).single();
+    if (data?.phone) setOwnerPhone(data.phone);
+  };
+
+  const handleCall = () => {
+    if (!ownerPhone) { Alert.alert('Contact', 'No phone number available for this listing.'); return; }
+    Linking.openURL(`tel:${ownerPhone}`);
+  };
+
+  const handleWhatsApp = () => {
+    if (!ownerPhone) { Alert.alert('Contact', 'No phone number available for this listing.'); return; }
+    Linking.openURL(`https://wa.me/91${ownerPhone}`);
+  };
 
   return (
     <View style={styles.container}>
@@ -17,8 +60,8 @@ export default function RoomDetailScreen({ route, navigation }: any) {
              <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
                <Ionicons name="arrow-back" size={24} color="#fff" />
              </TouchableOpacity>
-             <TouchableOpacity style={styles.iconButton}>
-               <Ionicons name="heart-outline" size={24} color="#fff" />
+             <TouchableOpacity style={styles.iconButton} onPress={toggleSave}>
+               <Ionicons name={isSaved ? 'heart' : 'heart-outline'} size={24} color={isSaved ? '#EF4444' : '#fff'} />
              </TouchableOpacity>
           </SafeAreaView>
         </View>
@@ -37,7 +80,6 @@ export default function RoomDetailScreen({ route, navigation }: any) {
                   <Text style={styles.typeText}>{property.type}</Text>
                 </View>
              )}
-             <View style={styles.typeBadge}><Text style={styles.typeText}>Any</Text></View>
           </View>
 
           <Text style={styles.title}>{property.title}</Text>
@@ -150,10 +192,10 @@ export default function RoomDetailScreen({ route, navigation }: any) {
             <LinearGradient colors={['#FF4B2B', '#FF416C']} style={styles.ownerAvatar}>
                <Ionicons name="person-outline" size={24} color="#fff" />
             </LinearGradient>
-            <View style={{flex: 1, marginLeft: 16}}>
-               <Text style={styles.ownerName}>Rajesh Kumar</Text>
-               <Text style={styles.ownerSubtitle}>Property Owner</Text>
-            </View>
+             <View style={{flex: 1, marginLeft: 16}}>
+                <Text style={styles.ownerName}>{property.owner_name || 'Verified Owner'}</Text>
+                <Text style={styles.ownerSubtitle}>Property Owner · {ownerPhone ? ownerPhone : 'Contact via WhatsApp'}</Text>
+             </View>
             <Ionicons name="checkmark-circle" size={20} color="#22c55e" />
           </View>
 
@@ -162,13 +204,13 @@ export default function RoomDetailScreen({ route, navigation }: any) {
       </ScrollView>
 
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.callButton}>
+        <TouchableOpacity style={styles.callButton} onPress={handleCall}>
            <Ionicons name="call-outline" size={20} color="#fff" />
            <Text style={styles.callButtonText}>Call</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.whatsappContainer}>
-           <LinearGradient colors={['#FF512F', '#F09819']} style={styles.whatsappButton}>
-              <Ionicons name="chatbubbles-outline" size={20} color="#fff" />
+        <TouchableOpacity style={styles.whatsappContainer} onPress={handleWhatsApp}>
+           <LinearGradient colors={['#25D366', '#128C7E']} style={styles.whatsappButton}>
+              <Ionicons name="logo-whatsapp" size={20} color="#fff" />
               <Text style={styles.whatsappText}>WhatsApp</Text>
            </LinearGradient>
         </TouchableOpacity>
