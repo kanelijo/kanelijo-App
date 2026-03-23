@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform, TextInput, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,7 +10,7 @@ export default function EditProfileScreen({ navigation }: any) {
   const [bio, setBio] = useState('');
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={Platform.OS !== 'web'} style={{ flex: 1 }}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -74,12 +75,12 @@ export default function EditProfileScreen({ navigation }: any) {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start' },
   title: { fontSize: 18, fontWeight: '700', color: '#fff' },
@@ -94,3 +95,6 @@ const styles = StyleSheet.create({
   saveButton: { backgroundColor: '#FF4500', borderRadius: 24, paddingVertical: 16, alignItems: 'center', marginTop: 16 },
   saveButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });
+
+
+

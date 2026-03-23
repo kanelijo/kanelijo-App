@@ -220,7 +220,7 @@ export default function RoomDetailScreen({ route, navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0a' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   imageContainer: { height: 350, position: 'relative' },
   image: { width: '100%', height: '100%', resizeMode: 'cover' },
   overlayHeader: { position: 'absolute', top: Platform.OS === 'android' ? 40 : 20, left: 16, right: 16, flexDirection: 'row', justifyContent: 'space-between' },
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   ownerAvatar: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center' },
   ownerName: { fontSize: 16, fontWeight: '700', color: '#fff', marginBottom: 4 },
   ownerSubtitle: { color: '#a1a1aa', fontSize: 13, marginTop: 2 },
-  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#0a0a0a', borderTopWidth: 1, borderTopColor: '#27272a', flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 16, paddingBottom: Platform.OS === 'ios' ? 32 : 16, gap: 12 },
+  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'transparent', borderTopWidth: 1, borderTopColor: '#27272a', flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 16, paddingBottom: Platform.OS === 'ios' ? 32 : 16, gap: 12 },
   callButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#27272a', borderRadius: 16, paddingVertical: 16, gap: 8 },
   callButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
   whatsappContainer: { flex: 2, borderRadius: 16, overflow: 'hidden' },
@@ -273,3 +273,4 @@ const styles = StyleSheet.create({
   nearbyListCat: { color: '#71717a', fontSize: 12, marginTop: 2 },
   nearbyListDist: { color: '#3b82f6', fontSize: 14, fontWeight: '700' },
 });
+

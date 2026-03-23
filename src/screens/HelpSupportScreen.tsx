@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -26,7 +27,7 @@ export default function HelpSupportScreen({ navigation }: any) {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
            <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -70,12 +71,12 @@ export default function HelpSupportScreen({ navigation }: any) {
         </View>
 
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingBottom: 16 },
   backBtn: { padding: 8 },
   headerTitle: { fontSize: 20, fontWeight: '700', color: '#fff' },
@@ -96,3 +97,6 @@ const styles = StyleSheet.create({
   faqQOpen: { color: '#FF3B30' },
   faqA: { fontSize: 14, color: '#a1a1aa', marginTop: 12, lineHeight: 22, borderTopWidth: 1, borderTopColor: '#27272a', paddingTop: 12 },
 });
+
+
+

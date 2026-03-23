@@ -155,7 +155,7 @@ export default function AddLibraryScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start' },
   headerTitle: { fontSize: 18, fontWeight: '700', color: '#fff' },
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   sectionTitle: { color: '#71717a', fontSize: 12, fontWeight: '700', letterSpacing: 1, marginBottom: 12, marginTop: 12 },
   imageContainer: { width: 100, height: 100, marginRight: 12, borderRadius: 12, overflow: 'visible' },
   thumb: { width: 100, height: 100, borderRadius: 12 },
-  removeImageBtn: { position: 'absolute', top: -8, right: -8, backgroundColor: '#0a0a0a', borderRadius: 12 },
+  removeImageBtn: { position: 'absolute', top: -8, right: -8, backgroundColor: 'transparent', borderRadius: 12 },
   addPhotoBtn: { width: 100, height: 100, borderRadius: 12, borderWidth: 2, borderColor: '#27272a', borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', backgroundColor: '#131316' },
   addPhotoText: { color: '#3282B8', fontSize: 12, fontWeight: '600', marginTop: 8 },
   formGroup: { marginBottom: 20 },
@@ -179,3 +179,4 @@ const styles = StyleSheet.create({
   publishGradient: { paddingVertical: 16, alignItems: 'center', justifyContent: 'center' },
   publishText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });
+

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -49,7 +50,7 @@ export default function ProfileScreen({ navigation }: any) {
   const initials = name.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <View style={styles.topHeader}>
         <Text style={styles.headerTitleKanelijo}>Kanelijo</Text>
       </View>
@@ -129,7 +130,7 @@ export default function ProfileScreen({ navigation }: any) {
         </View>
 
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -144,7 +145,7 @@ function MenuItem({ icon, label, onPress }: { icon: any; label: string; onPress?
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   topHeader: { paddingHorizontal: 24, paddingVertical: 12 },
   headerTitleKanelijo: { fontSize: 24, fontWeight: '800', color: '#FF3B30', letterSpacing: 1 },
   container: { paddingHorizontal: 16, paddingBottom: 60, paddingTop: 8 },
@@ -170,3 +171,6 @@ const styles = StyleSheet.create({
   menuIconContainer: { marginRight: 16 },
   menuLabel: { flex: 1, fontSize: 15, color: '#e4e4e7', fontWeight: '500' },
 });
+
+
+

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, ScrollView, TextInput, ActivityIndicator, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import JobCard, { JobData } from '../components/JobCard';
@@ -41,7 +42,7 @@ export default function JobsScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <Text style={styles.screenTitle}>Find Student Jobs</Text>
@@ -68,12 +69,12 @@ export default function JobsScreen({ navigation }: any) {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   container: { flex: 1, paddingHorizontal: 16, paddingTop: 16 },
   headerRow: { marginBottom: 20 },
   screenTitle: { fontSize: 28, fontWeight: '800', color: '#fff' },
@@ -83,3 +84,6 @@ const styles = StyleSheet.create({
   resultsCount: { color: '#a1a1aa', fontSize: 14, fontWeight: '500', marginBottom: 16, marginLeft: 4 },
   listContainer: { paddingBottom: 40 },
 });
+
+
+

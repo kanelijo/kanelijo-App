@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
   TextInput, SafeAreaView, Animated, Easing, ActivityIndicator, Dimensions
@@ -150,6 +151,7 @@ export default function HomeScreen({ navigation }: any) {
     : [];
 
   return (
+    <ScreenBackground>
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false} bounces={false}>
 
       {/* ── Compact Orange Header ── */}
@@ -266,11 +268,12 @@ export default function HomeScreen({ navigation }: any) {
         <View style={{ height: 40 }} />
       </View>
     </ScrollView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#09090b' },
+  container: { flex: 1, backgroundColor: 'transparent' },
 
   // Header — compact
   header: { paddingTop: 48, paddingBottom: 20, paddingHorizontal: 20 },
@@ -314,3 +317,5 @@ const styles = StyleSheet.create({
   ctaChip: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: 'rgba(255,69,0,0.1)', borderWidth: 1, borderColor: 'rgba(255,69,0,0.25)', borderRadius: 14, paddingVertical: 10 },
   ctaChipLabel: { color: '#FF4500', fontSize: 12, fontWeight: '700' },
 });
+
+

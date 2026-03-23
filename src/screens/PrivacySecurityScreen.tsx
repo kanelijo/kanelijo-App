@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform, TextInput, ScrollView, Switch, KeyboardAvoidingView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -8,7 +9,7 @@ export default function PrivacySecurityScreen({ navigation }: any) {
   const [twoFactor, setTwoFactor] = useState(false);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled={Platform.OS !== 'web'} style={{ flex: 1 }}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -72,12 +73,12 @@ export default function PrivacySecurityScreen({ navigation }: any) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start' },
   title: { fontSize: 18, fontWeight: '700', color: '#fff' },
@@ -95,3 +96,6 @@ const styles = StyleSheet.create({
   deleteRow: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 16 },
   deleteText: { color: '#EF4444', fontSize: 16, fontWeight: '600' },
 });
+
+
+

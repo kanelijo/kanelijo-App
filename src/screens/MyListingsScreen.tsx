@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, SafeAreaView, Platform, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -92,7 +93,7 @@ export default function MyListingsScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -140,12 +141,12 @@ export default function MyListingsScreen({ navigation }: any) {
           contentContainerStyle={styles.list}
         />
       )}
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start' },
   addButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-end' },
@@ -171,3 +172,6 @@ const styles = StyleSheet.create({
   createButton: { paddingHorizontal: 32, paddingVertical: 14, borderRadius: 24 },
   createText: { color: '#fff', fontSize: 15, fontWeight: '700' },
 });
+
+
+

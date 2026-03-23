@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -55,16 +56,16 @@ export default function SavedScreen({ navigation }: any) {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <ScreenBackground>
         <View style={styles.header}><Text style={styles.headerTitle}>Saved Rooms</Text></View>
         <ActivityIndicator size="large" color="#FF4500" style={{ marginTop: 60 }} />
-      </SafeAreaView>
+      </ScreenBackground>
     );
   }
 
   if (saved.length === 0) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <ScreenBackground>
         <View style={styles.header}><Text style={styles.headerTitle}>Saved Rooms</Text></View>
         <View style={styles.emptyContainer}>
           <View style={styles.iconCircle}>
@@ -79,12 +80,12 @@ export default function SavedScreen({ navigation }: any) {
             </LinearGradient>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </ScreenBackground>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <View style={styles.header}><Text style={styles.headerTitle}>Saved Rooms ({saved.length})</Text></View>
       <FlatList
         data={saved}
@@ -97,12 +98,12 @@ export default function SavedScreen({ navigation }: any) {
           />
         )}
       />
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 16 },
   headerTitle: { fontSize: 24, fontWeight: '800', color: '#fff' },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 },
@@ -112,3 +113,6 @@ const styles = StyleSheet.create({
   button: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 32, paddingVertical: 14, borderRadius: 24 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });
+
+
+

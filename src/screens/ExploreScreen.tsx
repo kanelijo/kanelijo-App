@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, SafeAreaView, Platform, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -65,7 +66,7 @@ export default function ExploreScreen({ navigation }: any) {
   });
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 
         {/* Ecosystem Switcher Tiles */}
@@ -123,7 +124,7 @@ export default function ExploreScreen({ navigation }: any) {
         </View>
 
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -145,7 +146,7 @@ function FilterPill({ label, active, onPress }: any) {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   container: { flex: 1, paddingHorizontal: 16, paddingTop: 16 },
   switcherTitle: { color: '#71717a', fontSize: 11, fontWeight: '700', letterSpacing: 1, marginBottom: 12 },
   switcherRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
@@ -166,3 +167,6 @@ const styles = StyleSheet.create({
   listContainer: { paddingBottom: 40 },
   emptyText: { color: '#71717a', fontSize: 15, textAlign: 'center', marginTop: 40 },
 });
+
+
+

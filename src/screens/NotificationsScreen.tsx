@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ScreenBackground from '../components/ScreenBackground';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Platform, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -24,7 +25,7 @@ export default function NotificationsScreen({ navigation }: any) {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <ScreenBackground>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -47,12 +48,12 @@ export default function NotificationsScreen({ navigation }: any) {
           {renderToggle("Promotional Offers", "Hear about new features and deals.", promos, setPromos)}
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
+  safeArea: { flex: 1, backgroundColor: 'transparent', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 16 },
   backButton: { width: 40, height: 40, justifyContent: 'center', alignItems: 'flex-start' },
   title: { fontSize: 18, fontWeight: '700', color: '#fff' },
@@ -65,3 +66,6 @@ const styles = StyleSheet.create({
   toggleDesc: { color: '#a1a1aa', fontSize: 13 },
   divider: { height: 1, backgroundColor: '#27272a', marginLeft: 16 },
 });
+
+
+
