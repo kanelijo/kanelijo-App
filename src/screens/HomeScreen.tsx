@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, TextInput, SafeAreaView, Animated, Easing } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import PropertyCard, { PropertyData } from '../components/PropertyCard';
@@ -41,6 +41,63 @@ export default function HomeScreen({ navigation }: any) {
   const [activeType, setActiveType] = useState('All');
 
   const filteredProperties = activeType === 'All' ? MOCK_PROPERTIES : MOCK_PROPERTIES.filter(p => p.type === activeType);
+  const duplicatedProperties = [...filteredProperties, ...filteredProperties, ...filteredProperties];
+
+  // Typewriter Effect
+  const typingWords = ["Student Rooms", "Libraries", "Coachings", "Schools", "Family Rooms"];
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [displayText, setDisplayedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    const currentWord = typingWords[currentWordIndex];
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting) {
+      // Typing forward
+      if (displayText.length < currentWord.length) {
+        timeout = setTimeout(() => {
+          setDisplayedText(currentWord.slice(0, displayText.length + 1));
+        }, 120);
+      } else {
+        // Finished typing, wait then start deleting
+        timeout = setTimeout(() => setIsDeleting(true), 2000);
+      }
+    } else {
+      // Deleting
+      if (displayText.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayedText(displayText.slice(0, -1));
+        }, 60);
+      } else {
+        // Finished deleting, move to next word
+        setIsDeleting(false);
+        setCurrentWordIndex((prev) => (prev + 1) % typingWords.length);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, currentWordIndex]);
+
+  useEffect(() => {
+    const cursorInterval = setInterval(() => setShowCursor(c => !c), 500);
+    return () => clearInterval(cursorInterval);
+  }, []);
+
+  // Marquee Effect for Featured Rooms
+  const translateX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.timing(translateX, {
+        toValue: -888, // ~3 cards width (280 + 16 margin * 3)
+        duration: 7500, // 2x faster speed
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    ).start();
+  }, [translateX]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false} bounces={false}>
@@ -48,11 +105,18 @@ export default function HomeScreen({ navigation }: any) {
       <LinearGradient colors={['#FF4500', '#FF3B30']} style={styles.headerGradient}>
         <SafeAreaView>
           <View style={styles.headerTop}>
-            <View>
+            <View style={styles.typewriterContainer}>
               <Text style={styles.greetingText}>Find your perfect</Text>
-              <Text style={styles.titleText}>Student Room</Text>
+              <Text 
+                style={styles.titleText} 
+                numberOfLines={1} 
+                adjustsFontSizeToFit
+              >
+                {displayText}
+                <Text style={{ opacity: showCursor ? 1 : 0 }}>|</Text>
+              </Text>
             </View>
-            <TouchableOpacity style={styles.listRoomButton}>
+            <TouchableOpacity style={styles.listRoomButton} onPress={() => navigation.navigate('AddRoom')}>
               <Ionicons name="add" size={16} color="#FF4500" />
               <Text style={styles.listRoomText}>List Room</Text>
             </TouchableOpacity>
@@ -90,13 +154,15 @@ export default function HomeScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
-          {filteredProperties.map(item => (
-            <View key={item.id} style={styles.horizontalCardContainer}>
-              <PropertyCard data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} variant="horizontal" />
-            </View>
-          ))}
-        </ScrollView>
+        <View style={{ overflow: 'hidden', paddingVertical: 10 }}>
+          <Animated.View style={[styles.horizontalList, { width: 3000, flexDirection: 'row', transform: [{ translateX }] }]}>
+            {duplicatedProperties.map((item, index) => (
+              <View key={`${item.id}-${index}`} style={styles.horizontalCardContainer}>
+                <PropertyCard data={item} onPress={() => navigation.navigate('RoomDetail', { property: item })} variant="horizontal" />
+              </View>
+            ))}
+          </Animated.View>
+        </View>
 
         <View style={styles.filterRow}>
           <Text style={styles.sectionTitle}>6 Rooms Available</Text>
@@ -143,9 +209,14 @@ const styles = StyleSheet.create({
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingHorizontal: 24,
     marginBottom: 24,
+  },
+  typewriterContainer: {
+    flex: 1,
+    paddingRight: 10,
+    minHeight: 65, // Prevents vertical jitter
   },
   greetingText: { fontSize: 16, color: '#fff', fontWeight: '500', opacity: 0.9 },
   titleText: { fontSize: 32, color: '#fff', fontWeight: '800', marginTop: 4 },

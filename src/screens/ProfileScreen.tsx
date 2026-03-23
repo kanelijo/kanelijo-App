@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '../services/supabase';
 
 export default function ProfileScreen({ navigation }: any) {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data?.user);
+    });
+  }, []);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
+
+  const roleString = user?.user_metadata?.role || 'Guest';
+  const displayRole = roleString.charAt(0).toUpperCase() + roleString.slice(1);
+  const email = user?.email || 'Loading...';
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -24,8 +36,8 @@ export default function ProfileScreen({ navigation }: any) {
             </View>
           </LinearGradient>
           
-          <Text style={styles.userName}>Student User</Text>
-          <Text style={styles.userEmail}>student@university.edu</Text>
+          <Text style={styles.userName}>{displayRole} User</Text>
+          <Text style={styles.userEmail}>{email}</Text>
           
           <View style={styles.statsContainer}>
             <View style={styles.statBox}>
@@ -47,14 +59,14 @@ export default function ProfileScreen({ navigation }: any) {
         <View style={styles.menuCard}>
           <MenuItem icon="heart-outline" label="Saved Rooms" onPress={() => navigation.navigate('Saved')} />
           <MenuItem icon="time-outline" label="Recently Viewed" onPress={() => navigation.navigate('Explore')} />
-          <MenuItem icon="home-outline" label="My Listings" onPress={() => alert('Listings coming soon!')} />
+          <MenuItem icon="home-outline" label="My Listings" onPress={() => navigation.navigate('MyListings')} />
         </View>
 
         <Text style={styles.sectionTitle}>ACCOUNT</Text>
         <View style={styles.menuCard}>
-          <MenuItem icon="person-outline" label="Edit Profile" onPress={() => alert('Edit Profile coming soon!')} />
-          <MenuItem icon="notifications-outline" label="Notifications" onPress={() => alert('Notifications coming soon!')} />
-          <MenuItem icon="shield-checkmark-outline" label="Privacy & Security" onPress={() => alert('Privacy & Security coming soon!')} />
+          <MenuItem icon="person-outline" label="Edit Profile" onPress={() => navigation.navigate('EditProfile')} />
+          <MenuItem icon="notifications-outline" label="Notifications" onPress={() => navigation.navigate('Notifications')} />
+          <MenuItem icon="shield-checkmark-outline" label="Privacy & Security" onPress={() => navigation.navigate('PrivacySecurity')} />
           <MenuItem icon="help-circle-outline" label="Help & Support" onPress={() => navigation.navigate('HelpSupport')} />
         </View>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import MapView, { Marker, Callout } from 'react-native-maps';
 
 export default function RoomDetailScreen({ route, navigation }: any) {
   const { property } = route.params;
@@ -73,13 +74,74 @@ export default function RoomDetailScreen({ route, navigation }: any) {
 
           <Text style={styles.sectionTitle}>Amenities</Text>
           <View style={styles.amenitiesGrid}>
-            {(property.amenities || ['WiFi', 'AC', 'Attached Bathroom', 'Furnished']).map((am: string, idx: number) => (
+            {(property.amenities && property.amenities.length > 0 ? property.amenities : ['WiFi', 'AC', 'Attached Bathroom', 'Furnished']).map((am: string, idx: number) => (
                <View key={idx} style={styles.amenityPill}>
                  <Ionicons name="checkmark" size={14} color="#a1a1aa" style={{marginRight: 6}} />
-                 <Text style={styles.amenityText}>{am}</Text>
+                 <Text style={styles.amenityText}>{am.charAt(0).toUpperCase() + am.slice(1)}</Text>
                </View>
             ))}
           </View>
+
+          <View style={styles.divider} />
+
+          <Text style={styles.sectionTitle}>Location & Nearby Ecosystems</Text>
+          <View style={styles.mapContainer}>
+             {(property.latitude && property.longitude) ? (
+                <MapView 
+                  style={styles.map} 
+                  initialRegion={{
+                    latitude: property.latitude,
+                    longitude: property.longitude,
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05,
+                  }}
+                  scrollEnabled={false}
+                  zoomEnabled={false}
+                >
+                  <Marker coordinate={{ latitude: property.latitude, longitude: property.longitude }}>
+                    <View style={styles.markerContainer}>
+                       <Ionicons name="location" size={40} color="#FF3B30" />
+                    </View>
+                  </Marker>
+                  {property.nearby_places && property.nearby_places.map((place: any, idx: number) => (
+                     <Marker 
+                       key={idx} 
+                       coordinate={{ latitude: place.latitude, longitude: place.longitude }}
+                     >
+                        <View style={styles.nearbyMarker}>
+                           <Ionicons name={place.category === 'College' ? 'school' : 'library'} size={24} color="#3b82f6" />
+                        </View>
+                        <Callout tooltip>
+                           <View style={styles.calloutBox}>
+                              <Text style={styles.calloutTitle}>{place.place_name}</Text>
+                              <Text style={styles.calloutDistance}>{place.distance_meters}m away</Text>
+                           </View>
+                        </Callout>
+                     </Marker>
+                  ))}
+                </MapView>
+             ) : (
+                <View style={styles.noMapPlaceholder}>
+                   <Ionicons name="map-outline" size={40} color="#3f3f46" />
+                   <Text style={{color: '#71717a', marginTop: 8}}>Location coordinates hidden</Text>
+                </View>
+             )}
+          </View>
+          
+          {property.nearby_places && property.nearby_places.length > 0 && (
+             <View style={styles.nearbyList}>
+                {property.nearby_places.map((p: any, idx: number) => (
+                   <View key={idx} style={styles.nearbyListItem}>
+                      <Ionicons name={p.category === 'College' ? 'school-outline' : 'library-outline'} size={20} color="#3b82f6" />
+                      <View style={{flex: 1, marginLeft: 12}}>
+                         <Text style={styles.nearbyListTitle}>{p.place_name}</Text>
+                         <Text style={styles.nearbyListCat}>{p.category}</Text>
+                      </View>
+                      <Text style={styles.nearbyListDist}>{p.distance_meters}m</Text>
+                   </View>
+                ))}
+             </View>
+          )}
 
           <View style={styles.divider} />
 
@@ -148,11 +210,24 @@ const styles = StyleSheet.create({
   ownerCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#18181b', padding: 16, borderRadius: 20, borderWidth: 1, borderColor: '#27272a' },
   ownerAvatar: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center' },
   ownerName: { fontSize: 16, fontWeight: '700', color: '#fff', marginBottom: 4 },
-  ownerSubtitle: { fontSize: 13, color: '#a1a1aa' },
-  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#131316', paddingHorizontal: 24, paddingTop: 16, paddingBottom: Platform.OS === 'ios' ? 32 : 16, borderTopWidth: 1, borderTopColor: '#27272a', flexDirection: 'row', gap: 16 },
-  callButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#18181b', borderRadius: 16, borderWidth: 1, borderColor: '#3f3f46', height: 56 },
-  callButtonText: { color: '#fff', fontSize: 16, fontWeight: '700', marginLeft: 8 },
-  whatsappContainer: { flex: 2 },
-  whatsappButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 16, height: 56 },
-  whatsappText: { color: '#fff', fontSize: 16, fontWeight: '700', marginLeft: 8 },
+  ownerSubtitle: { color: '#a1a1aa', fontSize: 13, marginTop: 2 },
+  bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#0a0a0a', borderTopWidth: 1, borderTopColor: '#27272a', flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 16, paddingBottom: Platform.OS === 'ios' ? 32 : 16, gap: 12 },
+  callButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#27272a', borderRadius: 16, paddingVertical: 16, gap: 8 },
+  callButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  whatsappContainer: { flex: 2, borderRadius: 16, overflow: 'hidden' },
+  whatsappButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 16, gap: 8 },
+  whatsappText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  mapContainer: { width: '100%', height: 250, borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#27272a', marginBottom: 16 },
+  map: { width: '100%', height: '100%' },
+  markerContainer: { alignItems: 'center', justifyContent: 'center' },
+  nearbyMarker: { backgroundColor: '#18181b', padding: 6, borderRadius: 20, borderWidth: 2, borderColor: '#3b82f6' },
+  noMapPlaceholder: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#131316' },
+  calloutBox: { backgroundColor: '#18181b', padding: 12, borderRadius: 12, borderWidth: 1, borderColor: '#27272a', minWidth: 120, alignItems: 'center' },
+  calloutTitle: { color: '#fff', fontSize: 13, fontWeight: '700', marginBottom: 4 },
+  calloutDistance: { color: '#3b82f6', fontSize: 11, fontWeight: '600' },
+  nearbyList: { gap: 12 },
+  nearbyListItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#18181b', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: '#27272a' },
+  nearbyListTitle: { color: '#fff', fontSize: 15, fontWeight: '600' },
+  nearbyListCat: { color: '#71717a', fontSize: 12, marginTop: 2 },
+  nearbyListDist: { color: '#3b82f6', fontSize: 14, fontWeight: '700' },
 });

@@ -25,6 +25,12 @@ const MOCK_PROPERTIES: PropertyData[] = [
   },
 ];
 
+const VERTICALS = [
+  { name: 'Shops', screen: 'Shops', icon: 'storefront-outline', colors: ['#FF512F', '#F09819'] as [string, string] },
+  { name: 'Libraries', screen: 'Libraries', icon: 'library-outline', colors: ['#3282B8', '#0F4C75'] as [string, string] },
+  { name: 'Jobs', screen: 'Jobs', icon: 'briefcase-outline', colors: ['#10B981', '#059669'] as [string, string] },
+];
+
 export default function ExploreScreen({ navigation }: any) {
   const [activeRoomType, setActiveRoomType] = useState('All');
   const [activeGender, setActiveGender] = useState('All');
@@ -34,6 +40,20 @@ export default function ExploreScreen({ navigation }: any) {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         
+        {/* Ecosystem Switcher Tiles */}
+        <Text style={styles.switcherTitle}>EXPLORE ECOSYSTEM</Text>
+        <View style={styles.switcherRow}>
+          {VERTICALS.map(v => (
+            <TouchableOpacity key={v.name} style={styles.switcherCard} onPress={() => navigation.navigate(v.screen)} activeOpacity={0.8}>
+              <LinearGradient colors={v.colors} style={styles.switcherGradient}>
+                <Ionicons name={v.icon as any} size={26} color="#fff" />
+                <Text style={styles.switcherLabel}>{v.name}</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Search */}
         <View style={styles.searchContainer}>
           <Ionicons name="search" size={20} color="#a1a1aa" style={styles.searchIcon} />
           <TextInput 
@@ -65,14 +85,9 @@ export default function ExploreScreen({ navigation }: any) {
               <FilterPill key={r} label={r} active={activeRent === r} onPress={() => setActiveRent(r)} />
             ))}
           </View>
-
-          <TouchableOpacity style={styles.verifiedFilterOutline}>
-            <Ionicons name="checkmark-circle-outline" size={16} color="#a1a1aa" style={{marginRight: 6}} />
-            <Text style={{color: '#a1a1aa', fontWeight: '500'}}>Verified only</Text>
-          </TouchableOpacity>
         </View>
 
-        <Text style={styles.resultsCount}>6 rooms found</Text>
+        <Text style={styles.resultsCount}>{MOCK_PROPERTIES.length} rooms found</Text>
 
         <View style={styles.listContainer}>
           {MOCK_PROPERTIES.map(item => (
@@ -105,6 +120,11 @@ function FilterPill({ label, active, onPress }: any) {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#0a0a0a', paddingTop: Platform.OS === 'android' ? 40 : 0 },
   container: { flex: 1, paddingHorizontal: 16, paddingTop: 16 },
+  switcherTitle: { color: '#71717a', fontSize: 11, fontWeight: '700', letterSpacing: 1, marginBottom: 12 },
+  switcherRow: { flexDirection: 'row', gap: 12, marginBottom: 24 },
+  switcherCard: { flex: 1, borderRadius: 16, overflow: 'hidden' },
+  switcherGradient: { paddingVertical: 18, alignItems: 'center', gap: 8 },
+  switcherLabel: { color: '#fff', fontSize: 12, fontWeight: '700' },
   searchContainer: { flexDirection: 'row', backgroundColor: '#131316', borderRadius: 20, padding: 16, alignItems: 'center', marginBottom: 24, borderWidth: 1, borderColor: '#27272a' },
   searchIcon: { marginRight: 12 },
   searchInput: { flex: 1, fontSize: 16, color: '#fff' },
@@ -116,7 +136,6 @@ const styles = StyleSheet.create({
   pillTextActive: { color: '#fff', fontSize: 13, fontWeight: '700' },
   pillInactive: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: '#18181b', borderWidth: 1, borderColor: '#3f3f46' },
   pillTextInactive: { color: '#e4e4e7', fontSize: 13, fontWeight: '500' },
-  verifiedFilterOutline: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderColor: '#3f3f46', borderWidth: 1 },
   resultsCount: { color: '#a1a1aa', fontSize: 14, fontWeight: '500', marginBottom: 16, marginLeft: 4 },
   listContainer: { paddingBottom: 40 },
 });
