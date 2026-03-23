@@ -12,7 +12,7 @@ export default function RoomDetailScreen({ route, navigation }: any) {
       <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
         
         <View style={styles.imageContainer}>
-          <Image source={{ uri: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=1200" }} style={styles.image} />
+          <Image source={{ uri: property.imageUrl || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=1200' }} style={styles.image} />
           <SafeAreaView style={styles.overlayHeader}>
              <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
                <Ionicons name="arrow-back" size={24} color="#fff" />
@@ -67,7 +67,7 @@ export default function RoomDetailScreen({ route, navigation }: any) {
 
           <Text style={styles.sectionTitle}>About This Room</Text>
           <Text style={styles.descriptionText}>
-            A beautifully furnished {property.type || 'studio'} apartment with modern amenities, ideal for students. Located conveniently in {property.location}. Fully air-conditioned with high-speed WiFi and attached bathroom.
+            {property.description || `A ${property.type || 'room'} located in ${property.location}. Contact the owner for more details.`}
           </Text>
 
           <View style={styles.divider} />

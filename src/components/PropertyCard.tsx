@@ -18,6 +18,10 @@ export interface PropertyData {
   type?: string;
   amenities?: string[];
   verified?: boolean;
+  // Map & ecosystem fields passed through from Supabase
+  latitude?: number;
+  longitude?: number;
+  nearby_places?: any[];
 }
 
 interface Props {
