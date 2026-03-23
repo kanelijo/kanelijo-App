@@ -5,6 +5,10 @@ import { supabase } from '../services/supabase';
 import { Ionicons } from '@expo/vector-icons';
 import { notifyServer } from '../utils/notifyServer';
 import ScreenBackground from '../components/ScreenBackground';
+import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri } from 'expo-auth-session';
+
+WebBrowser.maybeCompleteAuthSession();
 
 type Step = 'form' | 'otp' | 'forgot' | 'forgotSent';
 
@@ -53,6 +57,51 @@ export default function LoginScreen() {
       Alert.alert('Welcome to Kanelijo! 🎉', 'Your account has been verified.');
     }
     setLoading(false);
+  };
+
+  // ── Google OAuth ──
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      const redirectUrl = makeRedirectUri({ scheme: 'kanelijo', path: 'auth/callback' });
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: redirectUrl, skipBrowserRedirect: true },
+      });
+      if (error || !data?.url) { Alert.alert('Google Sign In Error', error?.message || 'Could not open Google login.'); setLoading(false); return; }
+
+      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
+      if (result.type === 'success') {
+        const url = result.url;
+        const hashParams = new URLSearchParams(url.split('#')[1] || '');
+        const queryParams = new URLSearchParams(url.split('?')[1] || '');
+        const accessToken = hashParams.get('access_token') || queryParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token') || queryParams.get('refresh_token');
+        if (accessToken) {
+          const { data: sessionData } = await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken || '' });
+          // Fire welcome email only for brand-new Google users
+          const user = sessionData?.user;
+          if (user) {
+            const createdAt = new Date(user.created_at).getTime();
+            const lastSignIn = new Date(user.last_sign_in_at || user.created_at).getTime();
+            const isNewUser = Math.abs(lastSignIn - createdAt) < 10000; // within 10s = new signup
+            if (isNewUser && user.email) {
+              notifyServer({
+                type: 'welcome',
+                email: user.email,
+                name: user.user_metadata?.full_name || user.email.split('@')[0],
+              });
+            }
+          }
+        } else {
+          Alert.alert('Sign In Incomplete', 'Could not retrieve session from Google. Please try again.');
+        }
+      }
+    } catch (e: any) {
+      Alert.alert('Error', e.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ── Forgot Password ──
@@ -142,6 +191,19 @@ export default function LoginScreen() {
                 <LinearGradient colors={['#E83A30', '#F0994E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.gradientButton}>
                   {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{isSignUp ? 'Create Account' : 'Sign In'}</Text>}
                 </LinearGradient>
+              </TouchableOpacity>
+
+              {/* Divider */}
+              <View style={styles.divider}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or continue with</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              {/* Google Button */}
+              <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn} disabled={loading}>
+                <Text style={styles.googleIcon}>G</Text>
+                <Text style={styles.googleButtonText}>Continue with Google</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.switchModeButton} onPress={() => setIsSignUp(!isSignUp)} disabled={loading}>
@@ -279,4 +341,10 @@ const styles = StyleSheet.create({
   emailHighlight: { color: '#E83A30', fontWeight: '700' },
   successState: { alignItems: 'center', paddingVertical: 16 },
   successIcon: { marginBottom: 16 },
+  divider: { flexDirection: 'row', alignItems: 'center', marginVertical: 20, gap: 10 },
+  dividerLine: { flex: 1, height: 1, backgroundColor: '#e5e7eb' },
+  dividerText: { color: '#9ca3af', fontSize: 13, fontWeight: '500' },
+  googleButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#e5e7eb', borderRadius: 16, height: 56, gap: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2 },
+  googleIcon: { fontSize: 22, fontWeight: '800', color: '#EA4335', fontStyle: 'italic' },
+  googleButtonText: { color: '#374151', fontSize: 15, fontWeight: '700' },
 });
